@@ -4,11 +4,11 @@ version = "0.1.0"
 authors = ["Oussama <md.oussama@gmail.com>"]
 
 [dependencies]
-
+lazy_static = "1.0.0"
 
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-stdweb = "*"
+stdweb = { git = "https://github.com/koute/stdweb"}
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 glutin = "*"
