@@ -229,20 +229,6 @@ pub enum MouseButton {
     Other(u8),
 }
 
-use stdweb::web::event::{MouseButton as MB};
-
-impl MouseButton  {
-
-    pub fn from_mouse_button(btn:MB) -> MouseButton {
-        match btn {
-            MB::Left => MouseButton::Left,
-            MB::Right => MouseButton::Right,
-            MB::Wheel => MouseButton::Middle,
-            MB::Button4 => MouseButton::Other(3),
-            MB::Button5 => MouseButton::Other(4)
-        }
-    }
-}
 
 /// Describes a difference in the mouse scroll wheel state.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -465,24 +451,6 @@ impl VirtualKeyCode {
     }
 }
 
-use stdweb::web::event::*;
-
-impl KeyboardInput {
-
-    pub fn from_keyboard_event<T:IKeyboardEvent>(ev:&T,state:ElementState) -> KeyboardInput {
-        KeyboardInput {
-            scancode:0,
-            state,
-            virtual_keycode:VirtualKeyCode::from_key(ev.key()),
-            modifiers: ModifiersState {
-                shift:ev.shift_key(),
-                ctrl:ev.ctrl_key(),
-                alt:ev.alt_key(),
-                logo:false,
-            }
-        }
-    }
-}
 
 /// Represents the current state of the keyboard modifiers
 ///
@@ -500,3 +468,41 @@ pub struct ModifiersState {
     /// This is the "windows" key on PC and "command" key on Mac.
     pub logo: bool
 }
+
+#[cfg(all(target_arch = "wasm32",feature="stdw"))]
+    use stdweb::web::event::*;
+
+#[cfg(all(target_arch = "wasm32",feature="stdw"))]
+    impl KeyboardInput {
+
+        pub fn from_keyboard_event<T:IKeyboardEvent>(ev:&T,state:ElementState) -> KeyboardInput {
+            KeyboardInput {
+                scancode:0,
+                state,
+                virtual_keycode:VirtualKeyCode::from_key(ev.key()),
+                modifiers: ModifiersState {
+                    shift:ev.shift_key(),
+                    ctrl:ev.ctrl_key(),
+                    alt:ev.alt_key(),
+                    logo:false,
+                }
+            }
+        }
+    }
+
+#[cfg(all(target_arch = "wasm32",feature="stdw"))]
+    use stdweb::web::event::{MouseButton as MB};
+
+#[cfg(all(target_arch = "wasm32",feature="stdw"))]
+    impl MouseButton  {
+
+        pub fn from_mouse_button(btn:MB) -> MouseButton {
+            match btn {
+                MB::Left => MouseButton::Left,
+                MB::Right => MouseButton::Right,
+                MB::Wheel => MouseButton::Middle,
+                MB::Button4 => MouseButton::Other(3),
+                MB::Button5 => MouseButton::Other(4)
+            }
+        }
+    }

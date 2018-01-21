@@ -6,9 +6,16 @@ authors = ["Oussama <md.oussama@gmail.com>"]
 [dependencies]
 lazy_static = "1.0.0"
 
-
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-stdweb = { git = "https://github.com/koute/stdweb"}
-
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 glutin = "*"
+
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+stdweb = { git = "https://github.com/koute/stdweb", optional = true }
+
+
+[features]
+default = ["stdw"]
+
+
+stdw = ["stdweb"]
