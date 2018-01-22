@@ -126,6 +126,6 @@ impl App {
             self.run(callback);
         });
 
-        //stdweb::event_loop();
+        event_loop();
     }
 }
