@@ -20,9 +20,6 @@ pub mod events {
     pub use glutin::*;
 }
 
-#[cfg(not(target_arch = "wasm32"))]
-use std::os::raw::c_void;
-
 
 
 

@@ -1,8 +1,22 @@
+use stdweb::web::html_element::CanvasElement;
 use events::*;
 use stdweb::*;
 use std::cell::RefCell;
 use std::rc::Rc;
 use AppConfig;
+use stdweb::traits::*;
+use stdweb::unstable::TryInto;
+use stdweb::web::{
+    document,
+    window,
+    CanvasRenderingContext2d
+};
+
+use stdweb::web::event::{
+    MouseMoveEvent,
+    ResizeEvent,
+};
+
 
 pub struct App {
     pub events: Vec<Event>,
@@ -16,12 +30,13 @@ impl App {
         use stdweb::web::*;
 
         let _ = initialize();
-        let canvas = document().create_element("canvas");
-
-        js!{ (@{&canvas}).width = @{config.size.0} ; @{&canvas}.height = @{config.size.1};  };
+        let canvas:CanvasElement  = document().create_element("canvas").unwrap().try_into().unwrap();
+        canvas.set_width(config.size.0);
+        canvas.set_height(config.size.1);
 
         document()
             .query_selector("body")
+            .unwrap()
             .unwrap()
             .append_child(&canvas);
 
@@ -32,7 +47,7 @@ impl App {
         let _events = Rc::new(RefCell::new(Vec::new()));
 
         let evs1 = _events.clone();
-        window().add_event_listener(move |ev: KeydownEvent| {
+        window().add_event_listener(move |ev: KeyDownEvent| {
             let input = KeyboardInput::from_keyboard_event(&ev, ElementState::Pressed);
             let event = WindowEvent::KeyboardInput {
                 device_id: DeviceId,
@@ -45,7 +60,7 @@ impl App {
         });
 
         let evs1 = _events.clone();
-        window().add_event_listener(move |ev: KeyupEvent| {
+        window().add_event_listener(move |ev: KeyUpEvent| {
             let input = KeyboardInput::from_keyboard_event(&ev, ElementState::Released);
             let event = WindowEvent::KeyboardInput {
                 device_id: DeviceId,
@@ -128,4 +143,8 @@ impl App {
 
         event_loop();
     }
+}
+
+pub fn log(msg:&str){
+    js!( console.log("LOG: ",@{msg}) );
 }

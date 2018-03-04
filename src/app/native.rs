@@ -1,4 +1,7 @@
 use events::*;
+use glutin;
+use AppConfig;
+use std::os::raw::c_void;
 
 pub struct App {
     window: glutin::GlWindow,
@@ -39,7 +42,7 @@ impl App {
         &0
     }
     
-    pub fn run(mut self, mut callback: F)
+    pub fn run<F>(mut self, mut callback: F) where F: 'static+FnMut(&mut App) -> () 
     {
         use glutin::*;
         let mut running = true;
@@ -65,4 +68,8 @@ impl App {
             self.window.swap_buffers().unwrap();
         }
     }
+}
+
+pub fn log(msg:&str){
+    println!("LOG: {}",msg);
 }
