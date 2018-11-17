@@ -28,7 +28,6 @@ pub enum Event {
 /// Describes an event from a `Window`.
 #[derive(Clone, Debug)]
 pub enum WindowEvent {
-
     /// The size of the window has changed.
     Resized(u32, u32),
 
@@ -56,7 +55,10 @@ pub enum WindowEvent {
     Focused(bool),
 
     /// An event from the keyboard has been received.
-    KeyboardInput { device_id: DeviceId, input: KeyboardInput },
+    KeyboardInput {
+        device_id: DeviceId,
+        input: KeyboardInput,
+    },
 
     /// The cursor has moved on the window.
     CursorMoved {
@@ -66,7 +68,7 @@ pub enum WindowEvent {
         /// limited by the display area and it may have been transformed by the OS to implement effects such as cursor
         /// acceleration, it should not be used to implement non-cursor-like interactions such as 3D camera control.
         position: (f64, f64),
-        modifiers: ModifiersState
+        modifiers: ModifiersState,
     },
 
     /// The cursor has entered the window.
@@ -76,21 +78,38 @@ pub enum WindowEvent {
     CursorLeft { device_id: DeviceId },
 
     /// A mouse wheel movement or touchpad scroll occurred.
-    MouseWheel { device_id: DeviceId, delta: MouseScrollDelta, phase: TouchPhase, modifiers: ModifiersState },
+    MouseWheel {
+        device_id: DeviceId,
+        delta: MouseScrollDelta,
+        phase: TouchPhase,
+        modifiers: ModifiersState,
+    },
 
     /// An mouse button press has been received.
-    MouseInput { device_id: DeviceId, state: ElementState, button: MouseButton, modifiers: ModifiersState },
-  
+    MouseInput {
+        device_id: DeviceId,
+        state: ElementState,
+        button: MouseButton,
+        modifiers: ModifiersState,
+    },
 
     /// Touchpad pressure event.
     ///
     /// At the moment, only supported on Apple forcetouch-capable macbooks.
     /// The parameters are: pressure level (value between 0 and 1 representing how hard the touchpad
     /// is being pressed) and stage (integer representing the click level).
-    TouchpadPressure { device_id: DeviceId, pressure: f32, stage: i64 },
+    TouchpadPressure {
+        device_id: DeviceId,
+        pressure: f32,
+        stage: i64,
+    },
 
     /// Motion on some analog axis. May report data redundant to other, more specific events.
-    AxisMotion { device_id: DeviceId, axis: AxisId, value: f64 },
+    AxisMotion {
+        device_id: DeviceId,
+        axis: AxisId,
+        value: f64,
+    },
 
     /// The window needs to be redrawn.
     Refresh,
@@ -139,11 +158,19 @@ pub enum DeviceEvent {
     /// Motion on some analog axis.  This event will be reported for all arbitrary input devices
     /// that winit supports on this platform, including mouse devices.  If the device is a mouse
     /// device then this will be reported alongside the MouseMotion event.
-    Motion { axis: AxisId, value: f64 },
+    Motion {
+        axis: AxisId,
+        value: f64,
+    },
 
-    Button { button: ButtonId, state: ElementState },
+    Button {
+        button: ButtonId,
+        state: ElementState,
+    },
     Key(KeyboardInput),
-    Text { codepoint: char },
+    Text {
+        codepoint: char,
+    },
 }
 
 /// Describes a keyboard input event.
@@ -168,7 +195,7 @@ pub struct KeyboardInput {
     ///
     /// This is tracked internally to avoid tracking errors arising from modifier key state changes when events from
     /// this device are not being delivered to the application, e.g. due to keyboard focus being elsewhere.
-    pub modifiers: ModifiersState
+    pub modifiers: ModifiersState,
 }
 
 /// Describes touch-screen input state.
@@ -177,7 +204,7 @@ pub enum TouchPhase {
     Started,
     Moved,
     Ended,
-    Cancelled
+    Cancelled,
 }
 
 /// Represents touch event
@@ -199,9 +226,9 @@ pub enum TouchPhase {
 pub struct Touch {
     pub device_id: DeviceId,
     pub phase: TouchPhase,
-    pub location: (f64,f64),
+    pub location: (f64, f64),
     /// unique identifier of a finger.
-    pub id: u64
+    pub id: u64,
 }
 
 /// Hardware-dependent keyboard scan code.
@@ -229,23 +256,22 @@ pub enum MouseButton {
     Other(u8),
 }
 
-
 /// Describes a difference in the mouse scroll wheel state.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum MouseScrollDelta {
-	/// Amount in lines or rows to scroll in the horizontal
-	/// and vertical directions.
-	///
-	/// Positive values indicate movement forward
-	/// (away from the user) or rightwards.
-	LineDelta(f32, f32),
-	/// Amount in pixels to scroll in the horizontal and
-	/// vertical direction.
-	///
-	/// Scroll events are expressed as a PixelDelta if
-	/// supported by the device (eg. a touchpad) and
-	/// platform.
-	PixelDelta(f32, f32)
+    /// Amount in lines or rows to scroll in the horizontal
+    /// and vertical directions.
+    ///
+    /// Positive values indicate movement forward
+    /// (away from the user) or rightwards.
+    LineDelta(f32, f32),
+    /// Amount in pixels to scroll in the horizontal and
+    /// vertical direction.
+    ///
+    /// Scroll events are expressed as a PixelDelta if
+    /// supported by the device (eg. a touchpad) and
+    /// platform.
+    PixelDelta(f32, f32),
 }
 
 /// Symbolic name for a keyboard key.
@@ -394,7 +420,7 @@ pub enum VirtualKeyCode {
     Multiply,
     Mute,
     MyComputer,
-    NavigateForward, // also called "Prior"
+    NavigateForward,  // also called "Prior"
     NavigateBackward, // also called "Next"
     NextTrack,
     NoConvert,
@@ -435,8 +461,7 @@ pub enum VirtualKeyCode {
 }
 
 impl VirtualKeyCode {
-
-    pub fn from_key(val:String) -> Option<VirtualKeyCode> {
+    pub fn from_key(val: String) -> Option<VirtualKeyCode> {
         let key = val.as_str();
         Some(match key {
             "a" => VirtualKeyCode::A,
@@ -446,11 +471,10 @@ impl VirtualKeyCode {
             "ArrowRight" => VirtualKeyCode::Right,
             "" => VirtualKeyCode::Space,
             "Enter" => VirtualKeyCode::Return,
-            _ => VirtualKeyCode::Escape
+            _ => VirtualKeyCode::Escape,
         })
     }
 }
-
 
 /// Represents the current state of the keyboard modifiers
 ///
@@ -466,43 +490,17 @@ pub struct ModifiersState {
     /// The "logo" key
     ///
     /// This is the "windows" key on PC and "command" key on Mac.
-    pub logo: bool
+    pub logo: bool,
 }
 
-#[cfg(all(target_arch = "wasm32",feature="stdw"))]
-    use stdweb::web::event::*;
-
-#[cfg(all(target_arch = "wasm32",feature="stdw"))]
-    impl KeyboardInput {
-
-        pub fn from_keyboard_event<T:IKeyboardEvent>(ev:&T,state:ElementState) -> KeyboardInput {
-            KeyboardInput {
-                scancode:0,
-                state,
-                virtual_keycode:VirtualKeyCode::from_key(ev.key()),
-                modifiers: ModifiersState {
-                    shift:ev.shift_key(),
-                    ctrl:ev.ctrl_key(),
-                    alt:ev.alt_key(),
-                    logo:false,
-                }
-            }
+#[cfg(all(target_arch = "wasm32"))]
+impl MouseButton {
+    pub fn from_mouse_button(btn: i16) -> MouseButton {
+        match btn {
+            0 => MouseButton::Left,
+            2 => MouseButton::Right,
+            1 => MouseButton::Middle,
+            _ => MouseButton::Other(btn as u8),
         }
     }
-
-#[cfg(all(target_arch = "wasm32",feature="stdw"))]
-    use stdweb::web::event::{MouseButton as MB};
-
-#[cfg(all(target_arch = "wasm32",feature="stdw"))]
-    impl MouseButton  {
-
-        pub fn from_mouse_button(btn:MB) -> MouseButton {
-            match btn {
-                MB::Left => MouseButton::Left,
-                MB::Right => MouseButton::Right,
-                MB::Wheel => MouseButton::Middle,
-                MB::Button4 => MouseButton::Other(3),
-                MB::Button5 => MouseButton::Other(4)
-            }
-        }
-    }
+}

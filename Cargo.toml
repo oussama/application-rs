@@ -3,19 +3,12 @@ name = "application"
 version = "0.1.0"
 authors = ["Oussama <md.oussama@gmail.com>"]
 
+
+ 
 [dependencies]
-lazy_static = "1.0.0"
+wasm-bindgen = { version = "0.2"  }
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-glutin = "*"
-
-
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-stdweb = { git = "https://github.com/koute/stdweb", optional = true }
-
-
-[features]
-default = ["stdw"]
-
-
-stdw = ["stdweb"]
+[dependencies.web-sys]
+version = "0.3.2"
+features = [ "Window", "Document","Node",   'Element',
+  'HtmlElement', "HtmlBodyElement", "HtmlCanvasElement" , "Element" , "KeyboardEvent" , "MouseEvent","WebGl2RenderingContext"]
